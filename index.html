@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laptop Recommendation System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+ <style>
+:root {
+  --primary-color: #ff6f61; /* Coral */
+  --secondary-color: #6a5acd; /* Slate Blue */
+  --accent-color: #4caf50; /* Green */
+  --info-color: #2196f3; /* Blue */
+  --warning-color: #ff9800; /* Orange */
+  --danger-color: #f44336; /* Red */
+  --background-color: #f4f4f4; /* Light Gray */
+  --text-color: #333; /* Dark Text */
+  --card-bg: #ffffff; /* White */
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+.wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  transform: scale(0.98);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.wrapper:hover {
+  transform: scale(1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+header {
+  background-color: var(--primary-color);
+  padding: 1.5rem;
+  text-align: center;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+  transition: background-color 0.3s ease;
+}
+
+header:hover {
+  background-color: var(--accent-color);
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2.5rem;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+header p {
+  margin-top: 0.5rem;
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.recommendation-form {
+  background: var(--card-bg);
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.recommendation-form:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+fieldset {
+  border: 2px dashed var(--secondary-color);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 1.5rem;
+  transition: border-color 0.3s, box-shadow 0.3s ease;
+}
+
+fieldset:hover {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.2);
+}
+
+legend {
+  font-weight: bold;
+  color: var(--secondary-color);
+  font-size: 1.3rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+select, input {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: border-color 0.3s, background-color 0.3s;
+}
+
+select:focus, input:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  background-color: rgba(99, 102, 241, 0.1);
+}
+
+button {
+  background-color: var(--secondary-color);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s ease;
+}
+
+button:hover {
+  background-color: darken(var(--secondary-color), 10%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.result {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.result:hover {
+  transform: scale(1.02);
+}
+
+footer {
+  text-align: center;
+  margin-top: 20px;
+  padding: 15px;
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: 10px;
+  transition: background-color 0.3s ease;
+}
+
+footer:hover {
+  background-color: var(--danger-color);
+}
+ </style>
+
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+            <h1>Find Your Ideal Laptop</h1>
+            <p>Select your preferences, and we'll recommend the best match for you!</p>
+        </header>
+        <main>
+            <form action="/recommend" method="post" class="recommendation-form">
+                <fieldset>
+                    <legend>Basic Information</legend>
+                    <label for="persona"><i class="icon icon-user"></i> Select Persona</label>
+                    <select name="persona" id="persona">
+                        <option value="Student">Student</option>
+                        <option value="Gamer">Gamer</option>
+                        <option value="Professional">Professional</option>
+                        <option value="Creative">Creative</option>
+                        <option value="Engineering">Engineering</option>
+                        <option value="Business">Business</option>
+                    </select>
+
+                    <label for="usage"><i class="icon icon-pencil"></i> Describe Usage</label>
+                    <input type="text" id="usage" name="usage" placeholder="e.g., Studying, gaming, video editing">
+                </fieldset>
+
+                <fieldset>
+                    <legend>Technical Preferences</legend>
+                    <label for="processor"><i class="icon icon-chip"></i> Preferred Processor</label>
+                    <select name="processor" id="processor">
+                        <option value="Intel Core i5 / AMD Ryzen 5">Intel Core i5 / AMD Ryzen 5</option>
+                        <option value="Intel Core i7 / AMD Ryzen 7">Intel Core i7 / AMD Ryzen 7</option>
+                    </select>
+
+                    <label for="ram"><i class="icon icon-memory"></i> Preferred RAM</label>
+                    <select name="ram" id="ram">
+                        <option value="8GB DDR4">8GB DDR4</option>
+                        <option value="16GB DDR4">16GB DDR4</option>
+                    </select>
+
+                    <label for="graphics"><i class="icon icon-display"></i> Preferred Graphics</label>
+                    <select name="graphics" id="graphics">
+                        <option value="Integrated (Intel Iris Xe)">Integrated (Intel Iris Xe)</option>
+                        <option value="NVIDIA RTX 3060 / AMD Radeon RX 6600XT">NVIDIA RTX 3060 / AMD Radeon RX 6600XT</option>
+                    </select>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Storage & Display</legend>
+                    <label for="storage"><i class="icon icon-storage"></i> Preferred Storage</label>
+                    <select name="storage" id="storage">
+                        <option value="256GB SSD">256GB SSD</option>
+                        <option value="512GB SSD">512GB SSD</option>
+                        <option value="1TB HDD">1TB HDD</option>
+                    </select>
+
+                    <label for="display"><i class="icon icon-screen"></i> Preferred Display</label>
+                    <select name="display" id="display">
+                        <option value="13-15&quot; Full HD">13-15" Full HD</option>
+                        <option value="15-17&quot; QHD/4K">15-17" QHD/4K</option>
+                    </select>
+                </fieldset>
+
+                <fieldset>
+                    <legend>Battery Life</legend>
+                    <label for="battery"><i class="icon icon-battery"></i> Battery Life Expectation</label>
+                    <select name="battery" id="battery">
+                        <option value="6-8 hours">6-8 hours</option>
+                        <option value="7-9 hours">7-9 hours</option>
+                        <option value="8-12 hours">8-12 hours</option>
+                        <option value="12+ hours">12+ hours</option>
+                    </select>
+                </fieldset>
+
+                <button type="submit"><i class="icon icon-search"></i> Get Recommendation</button>
+            </form>
+
+            {% if recommendation %}
+            <section class="result">
+                <h2>Your Recommended Laptop</h2>
+                <p><strong>{{ recommendation }}</strong></p>
+            </section>
+            {% endif %}
+        </main>
+        <footer>
+            <p>&copy; 2025 Laptop Finder. All Rights Reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
